@@ -18,7 +18,20 @@ def print_user_basic_info():
     print(data["html_url"])
 
 def print_userrepos_info():
-    with open("user_data.json", "r", encoding="utf-8") as f:
+    with open("userrepos_data.json", "r", encoding="utf-8") as f:
         data = json.load(f)
+    for repo in data:
+        print(repo["name"], "-", repo["language"], "-", repo["description"])
+        print("==============================")
+
+
+def print_target_repos():
+    with open("target_repos_data.json", "r", encoding="utf-8") as f:
+        data = json.load(f)
+    print("===================================")
+    # print(data[""])
+
+
+
 
 

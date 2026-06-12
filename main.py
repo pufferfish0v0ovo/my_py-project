@@ -1,5 +1,5 @@
 import git_functions
-from project.git_functions import get_user_info
+from git_functions import *
 
 
 def github_menu():
@@ -11,9 +11,8 @@ def github_menu():
     print("*************************************")
     choose = int(input("please input your choose"))
     if choose == 1:
-        print("11111")
+        get_repos_info()
     elif choose == 2:
-        print("22222")
         get_user_info()
     elif choose == 3:
         print("33333")

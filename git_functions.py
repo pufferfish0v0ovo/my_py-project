@@ -28,11 +28,12 @@ def get_userrepos_info():
     if response.status_code == 200:
         data = response.json()
         with open("userrepos_data.json", "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=4)
+            json.dump(data, f, indent=4)
+        print("\n")
+        print_userrepos_info()
+
     else:
         print("Something went wrong.")
-    print("\n")
-    print_userrepos_info()
 
 
 def get_repos_user_info():
@@ -42,6 +43,11 @@ def get_repos_user_info():
     response = requests.get(url)
     if response.status_code == 200:
         data = response.json()
+        with open("target_repos_data.json", "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=4)
+        print_target_repos()
+    else:
+        print("Something went wrong.")
 
 
 def get_repos_info():
@@ -54,10 +60,9 @@ def get_repos_info():
 
     choose = (int(input("Please enter your choice: ")))
     if choose == 1:
-        print("1111111111")
         get_userrepos_info()
     elif choose == 2:
-        print("2222222222")
+        get_repos_user_info()
     elif choose == 3:
         print("33333333333")
     else:
