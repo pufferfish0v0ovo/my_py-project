@@ -43,7 +43,7 @@ def get_repos_user_info():
     response = requests.get(url)
     if response.status_code == 200:
         data = response.json()
-        with open("target_repos_data.json", "w", encoding="utf-8") as f:
+        with open("repos_data.json", "w", encoding="utf-8") as f:
             json.dump(data, f, indent=4)
         print_target_repos()
     else:

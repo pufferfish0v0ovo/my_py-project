@@ -24,13 +24,30 @@ def print_userrepos_info():
         print(repo["name"], "-", repo["language"], "-", repo["description"])
         print("==============================")
 
+def print_repo_basic_info():
+    with open("repo_data.json", "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+def print_repo_README():
+    print("11111111111")
+
+# 这个应该是需要传参
+def print_repo_content():
+    print("22222222222")
+
+def print_repo_tree():
+    print("33333333333")
 
 def print_target_repos():
-    with open("target_repos_data.json", "r", encoding="utf-8") as f:
+    with open("repos_data.json", "r", encoding="utf-8") as f:
         data = json.load(f)
     print("===================================")
     # print(data[""])
-
+    print_repo_basic_info()
+    choose1 = input("If you want to view the README of this repository, enter Y or y. Otherwise, enter any other character.")
+    if choose1.lower() == "y":
+        print_repo_README()
+    print_repo_content()
 
 
 
