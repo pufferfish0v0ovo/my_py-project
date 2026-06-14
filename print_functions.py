@@ -2,6 +2,9 @@ import json
 import requests
 import base64
 
+# 输出与用户有关的=====================================
+
+# 输出用户基本信息
 def print_user_basic_info():
     with open("user_data.json", "r", encoding="utf-8") as f:
         data = json.load(f)
@@ -25,6 +28,9 @@ def print_userrepos_info():
         print(repo["name"], "-", repo["language"], "-", repo["description"])
         print("==============================")
 
+# 输出与仓库有关的============================================
+
+# 输出某个仓库基本信息
 def print_repo_basic_info():
     with open("repo_data.json", "r", encoding="utf-8") as f:
         data = json.load(f)
@@ -47,6 +53,10 @@ def print_repo_README():
     reponame = data["name"]
     url = f"https://api.github.com/repos/{username}/{reponame}/readme"
     response = requests.get(url)
+
+    # print(response.status_code)
+    # print(response.text)
+
     if response.status_code != 200:
         print("Something went wrong.")
         return
@@ -58,7 +68,63 @@ def print_repo_README():
 
 # 这个应该是需要传参
 def print_repo_content():
-    print("22222222222")
+    with open("repo_data.json", "r", encoding="utf-8") as f:
+        data = json.load(f)
+    username = data["owner"]["login"]
+    reponame = data["name"]
+    url = f"https://api.github.com/repos/{username}/{reponame}/contents"
+
+    response = requests.get(url)
+    if response.status_code != 200:
+        print("Something went wrong.")
+        return
+    content = response.json()
+    # i = 1
+    # for item in content:
+    #     if item["type"] == "file":
+    #         print(i, "[FILE]", item["name"])
+    #     else:
+    #         print(i, "[DIR]", item["name"])
+    #     i += 1
+    history = []
+    while True:
+        for i, item in enumerate(content, 1):
+            if item["type"] == "file":
+                print(i, "[FILE]", item["name"])
+            else:
+                print(i, "[DIR]", item["name"])
+
+        choice =input("Press enter your choice\n"
+                      "You can enter 'exit', 'back', or a number:")
+        if choice == "exit":
+            break
+        if choice == "back":
+            if history:
+                content = history.pop()
+            else:
+                print("Already at root directory.")
+            continue
+
+        choice = int(choice)
+        selected = content[choice - 1]
+        if selected["type"] == "file":
+            url = f"https://api.github.com/repos/{username}/{reponame}/contents/{selected['path']}"
+            response = requests.get(url)
+            if response.status_code != 200:
+                print("Something went wrong.")
+                return
+            file_data = response.json()
+            file_content = base64.b64decode(file_data["content"]).decode("utf-8")
+            print(file_content)
+        else:
+            history.append(content)
+            url = f"https://api.github.com/repos/{username}/{reponame}/contents/{selected['path']}"
+            response = requests.get(url)
+            content = response.json()
+        input("\nPress Enter to continue...")
+
+
+print_repo_content()
 
 def print_repo_tree():
     print("33333333333")
@@ -67,8 +133,6 @@ def print_repo_issues():
     print("44444444444")
 
 def print_target_repos():
-    with open("repos_data.json", "r", encoding="utf-8") as f:
-        data = json.load(f)
     print("===================================")
     # print(data[""])
     print_repo_basic_info()
@@ -77,6 +141,6 @@ def print_target_repos():
         print_repo_README()
     print_repo_content()
 
-
+# print_repo_README()
 
 
