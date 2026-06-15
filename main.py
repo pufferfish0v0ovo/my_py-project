@@ -21,7 +21,7 @@ def github_menu():
     elif choose == 4:
         search_projects_by_keyword()
     elif choose == 5:
-        print("44444")
+        print("Please tap to check details")
     else:
         print("please input a valid choice")
 
@@ -29,8 +29,4 @@ def github_menu():
 
 
 # main
-print("***** 1.github    *****")
-print("***** 2.wikipedia *****")
-platform = input("please choose your platform 1 or 2:")
-if (platform == "1"):
-    github_menu()
+github_menu()

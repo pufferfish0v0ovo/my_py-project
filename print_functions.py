@@ -60,23 +60,24 @@ def print_hot_projects():
 def print_repo_basic_info():
     with open("repo_data.json", "r", encoding="utf-8") as f:
         data = json.load(f)
-    print("reponame", data["name"])
-    print("owner:", data["owner"]["login"])
-    print("description:", data["description"])
-    print("language:", data["language"])
-    print("star", data["stargazers_count"])
-    print("fork", data["forks_count"])
-    print("open_issues", data["open_issues_count"])
-    print("created_at", data["created_at"])
-    print("updated_at", data["updated_at"])
-    print("html_url", data["html_url"])
+
+    print("reponame", data.get("name", "UNKNOWN"))
+    print("owner:", data.get("owner", {}).get("login", "UNKNOWN"))
+    print("description:", data.get("description", "None"))
+    print("language:", data.get("language", "None"))
+    print("star", data.get("stargazers_count", 0))
+    print("fork", data.get("forks_count", 0))
+    print("open_issues", data.get("open_issues_count", 0))
+    print("created_at", data.get("created_at", "None"))
+    print("updated_at", data.get("updated_at", "None"))
+    print("html_url", data.get("html_url", "None"))
 
 
 def print_repo_README():
     with open("repo_data.json", "r", encoding="utf-8") as f:
         data = json.load(f)
-    username = data["owner"]["login"]
-    reponame = data["name"]
+    username = data.get("owner", {}).get("login", "UNKNOWN")
+    reponame = data.get("name", "UNKNOWN")
     url = f"https://api.github.com/repos/{username}/{reponame}/readme"
     response = requests.get(url)
 
@@ -98,8 +99,8 @@ def print_repo_README():
 def print_repo_content():
     with open("repo_data.json", "r", encoding="utf-8") as f:
         data = json.load(f)
-    username = data["owner"]["login"]
-    reponame = data["name"]
+    username = data.get("owner", {}).get("login", "UNKNOWN")
+    reponame = data.get("name", "UNKNOWN")
     url = f"https://api.github.com/repos/{username}/{reponame}/contents"
 
     response = requests.get(url)
@@ -193,8 +194,26 @@ def print_target_repos():
     choose2 = input("If you want to view the issues of this repository, enter Y or y. Otherwise, enter any other character.")
     if choose2.lower() == "y":
         print_repo_issues()
+    choose3 = input("\nView repository owner? (Y/N): ")
 
+    if choose3.lower() == "y":
+        print_repo_owner()
 
 # print_repo_README()
 
+
+def print_repo_owner():
+    with open("repo_data.json", "r", encoding="utf-8") as f:
+        data = json.load(f)
+    username = data["owner"]["login"]
+    url = f"https://api.github.com/users/{username}"
+    response = requests.get(url)
+    if response.status_code != 200:
+        print("Something went wrong.")
+        return
+
+    user_data = response.json()
+    with open("user_data.json", "w", encoding="utf-8") as f:
+        json.dump(user_data, f, indent=4)
+    print_user_basic_info()
 

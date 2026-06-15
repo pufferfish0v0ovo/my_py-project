@@ -58,7 +58,6 @@ def get_repos_info():
     print("Now you can search for repositories using two methods:")
     print("1. Search all repositories of a user")
     print("2. Search by username and repository name")
-    print("3. Search by repository name only")
     print("**********************************************************")
 
     choose = (int(input("Please enter your choice: ")))
@@ -66,8 +65,7 @@ def get_repos_info():
         get_userrepos_info()
     elif choose == 2:
         get_repos_user_info()
-    elif choose == 3:
-        print("33333333333")
+
     else:
         print("Invalid choice.")
 
