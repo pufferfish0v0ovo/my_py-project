@@ -20,6 +20,8 @@ def print_user_basic_info():
     print("=====================================")
     print("If you would like to view their GitHub profile in more detail, you can click the link below.")
     print(data["html_url"])
+    input("\nPress Enter to continue...")
+
 
 def print_userrepos_info():
     with open("userrepos_data.json", "r", encoding="utf-8") as f:
@@ -27,6 +29,7 @@ def print_userrepos_info():
     for repo in data:
         print(repo["name"], "-", repo["language"], "-", repo["description"])
         print("==============================")
+    input("\nPress Enter to continue...")
 
 # 输出与仓库有关的============================================
 
@@ -65,6 +68,8 @@ def print_repo_README():
     readme = base64.b64decode(readme_data["content"]).decode("utf-8")
     print("===================================")
     print(readme)
+    input("\nPress Enter to continue...")
+
 
 # 这个应该是需要传参
 def print_repo_content():
@@ -123,14 +128,22 @@ def print_repo_content():
             content = response.json()
         input("\nPress Enter to continue...")
 
-
-print_repo_content()
-
-def print_repo_tree():
-    print("33333333333")
-
 def print_repo_issues():
-    print("44444444444")
+    with open("repo_data.json", "r", encoding="utf-8") as f:
+        data = json.load(f)
+    username = data["owner"]["login"]
+    reponame = data["name"]
+    url = f"https://api.github.com/repos/{username}/{reponame}/issues"
+    response = requests.get(url)
+    if response.status_code != 200:
+        print("Something went wrong.")
+        return
+    issue_data = response.json()
+    issues = issue_data["items"]
+    for issue in issues:
+        title = issue["title"]
+
+
 
 def print_target_repos():
     print("===================================")
@@ -140,6 +153,10 @@ def print_target_repos():
     if choose1.lower() == "y":
         print_repo_README()
     print_repo_content()
+    choose2 = input("If you want to view the issues of this repository, enter Y or y. Otherwise, enter any other character.")
+    if choose2.lower() == "y":
+        print_repo_issues()
+
 
 # print_repo_README()
 
