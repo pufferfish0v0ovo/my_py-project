@@ -99,7 +99,7 @@ def print_repo_content():
             else:
                 print(i, "[DIR]", item["name"])
 
-        choice =input("Press enter your choice\n"
+        choice =input("Please enter your choice\n"
                       "You can enter 'exit', 'back', or a number:")
         if choice == "exit":
             break
@@ -139,9 +139,23 @@ def print_repo_issues():
         print("Something went wrong.")
         return
     issue_data = response.json()
-    issues = issue_data["items"]
-    for issue in issues:
-        title = issue["title"]
+    print("==================================")
+    for i, issue in enumerate(issue_data, 1):
+        print(i, "[ISSUE]", issue["title"])
+    print("\npress Enter to continue...")
+    while True:
+        choice = input("Please enter your choice\n"
+                       "You can enter 'exit' or a number:")
+        if choice == "exit":
+            return
+        choice = int(choice)
+        selected = issue_data[choice - 1]
+        print("============================")
+        print(selected["title"])
+        print(selected["body"])
+        print("\npress Enter to continue...")
+
+# print_repo_issues()
 
 
 
