@@ -3,6 +3,7 @@ import csv
 import json
 import print_functions
 import base64
+import urllib.parse
 from print_functions import *
 
 # 查找用户信息
@@ -70,3 +71,50 @@ def get_repos_info():
     else:
         print("Invalid choice.")
 
+
+def search_projects_by_keyword():
+    keyword = input("Please input keyword: ")
+    keyword = urllib.parse.quote(keyword)
+    url = (
+        "https://api.github.com/search/repositories?"
+        f"q={keyword}"
+    )
+    response = requests.get(url)
+    if response.status_code != 200:
+        print("Something went wrong.")
+        return
+    data = response.json()
+    repos = data["items"][:10]
+    print("\nSearch Result:\n")
+    for i, repo in enumerate(repos, 1):
+        print(
+            f"{i}. "
+            f"{repo['full_name']} "
+            f"- stars: {repo['stargazers_count']}"
+        )
+    choice = int(
+        input("\nSelect the number you want to search:")
+    )
+    selected = repos[choice - 1]
+    repo_response = requests.get(selected["url"])
+    repo_data = repo_response.json()
+    with open("repo_data.json", "w", encoding="utf-8") as f:
+        json.dump(repo_data, f, indent=4)
+
+    print_target_repos()
+
+
+# 查找热门项目
+def get_hot_projects():
+    url = (
+        "https://api.github.com/search/repositories?"
+        "q=stars:>50000&sort=stars&order=desc"
+    )
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        with open("hotprojects_data.json", "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=4)
+        print_hot_projects()
+    else:
+        print("Something went wrong.")

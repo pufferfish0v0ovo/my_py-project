@@ -31,6 +31,29 @@ def print_userrepos_info():
         print("==============================")
     input("\nPress Enter to continue...")
 
+def print_hot_projects():
+    with open("hotprojects_data.json", "r", encoding="utf-8") as f:
+        data = json.load(f)
+    projects = data["items"]
+    print("=========== HOT PROJECTS ===========")
+    for i, repo in enumerate(projects[:20], 1):
+        print(
+            f"{i}. "
+            f"{repo['full_name']} "
+            f"- Stars: {repo['stargazers_count']}"
+        )
+    choice = int(
+        input("\nSelect repository:")
+    )
+    selected = projects[choice - 1]
+    response = requests.get(selected["url"])
+    repo_data = response.json()
+
+    with open("repo_data.json", "w", encoding="utf-8") as f:
+        json.dump(repo_data, f, indent=4)
+
+    print_target_repos()
+
 # 输出与仓库有关的============================================
 
 # 输出某个仓库基本信息
