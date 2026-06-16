@@ -155,6 +155,11 @@ def print_repo_content():
 def print_repo_issues():
     with open("repo_data.json", "r", encoding="utf-8") as f:
         data = json.load(f)
+
+    if "owner" not in data:
+        print("GitHub API limit exceeded.")
+        return
+
     username = data["owner"]["login"]
     reponame = data["name"]
     url = f"https://api.github.com/repos/{username}/{reponame}/issues"

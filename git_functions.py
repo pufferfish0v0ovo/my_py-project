@@ -102,17 +102,70 @@ def search_projects_by_keyword():
     print_target_repos()
 
 
-# 查找热门项目
-def get_hot_projects():
+def get_all_hot_projects():
     url = (
         "https://api.github.com/search/repositories?"
         "q=stars:>50000&sort=stars&order=desc"
     )
+
     response = requests.get(url)
+
     if response.status_code == 200:
         data = response.json()
+
         with open("hotprojects_data.json", "w", encoding="utf-8") as f:
             json.dump(data, f, indent=4)
+
         print_hot_projects()
+
     else:
         print("Something went wrong.")
+
+def get_hot_projects_by_language():
+
+    language = input(
+        "Please input a programming language: "
+    )
+
+    url = (
+        "https://api.github.com/search/repositories?"
+        f"q=language:{urllib.parse.quote(language)}"
+        "&sort=stars"
+        "&order=desc"
+    )
+
+    response = requests.get(url)
+
+    if response.status_code != 200:
+        print("Something went wrong.")
+        return
+
+    data = response.json()
+
+    with open(
+        "hotprojects_data.json",
+        "w",
+        encoding="utf-8"
+    ) as f:
+        json.dump(data, f, indent=4)
+
+    print_hot_projects()
+
+# 查找热门项目
+def get_hot_projects():
+
+    print("=========== HOT PROJECT MENU ===========")
+    print("1. All Hot Projects")
+    print("2. Hot Projects By Language")
+    print("========================================")
+
+    choice = input("Please enter your choice: ")
+
+    if choice == "1":
+        get_all_hot_projects()
+
+    elif choice == "2":
+        get_hot_projects_by_language()
+
+    else:
+        print("Invalid choice.")
